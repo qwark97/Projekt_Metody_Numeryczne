@@ -1,1 +1,5 @@
-# Projekt_metody
+# Projekt na przedmiot Metody Numeryczne, Informatyka Stosowana, Uniwersytet Ekonomiczny w Krakowie 2019
+
+W tym repozytorium umieszczane są poszczególne etapy pracy nad moim projektem na studia. Poniżej znajduje się treść zadania.
+
+W poniższej tabeli zestawiono średnie miesięczne temperatury powietrza zanotowane w stacji meteorologicznej Kraków - obserwatorium w latach 2010-2016 (w stopniach C). Oblicz średnie za ten okres średnie temperatury miesięczne. Następnie wyznacz wielomian interpolacyjny przedstawiający zmiany temperatury w Krakowie w ciągu roku. Rozważ różne zestawy punktów uwzględniane w interpolacji tak, by uzyskany wielomian był jak najlepszy. Następnie wykorzystując jedną z metod przybliżonych znajdź w jakich dniach średnia temperatura w Krakowie spada poniżej zera oraz kiedy średnia temperatura staje się dodatnia. Wykorzystując rachunek różniczkowy znajdź najcieplejszy i najzimniejszy dzień w roku oraz średnią temperaturę z roku wykorzystując średnią całkową (do wyznaczenia całki – wykorzystaj jedną z metod poznanych na zajęciach). Do obliczenia pochodnej można wykorzystać odpowiednią metodę numeryczną.
