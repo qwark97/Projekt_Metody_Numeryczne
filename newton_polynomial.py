@@ -67,12 +67,14 @@ class Newton:
         Y = sum(Cs[i]* (reduce(mul, [x-xs[k] for k in range(i)], 1)) for i in range(len(Cs)))
         return Y
 
-    def plot(self, xs, name, X_axis='None', Y_axis='None', shift_X=0, shift_Y=0):
+    def plot(self, xs=None, name='Wielomian interpolacyjny', shift_X=0, shift_Y=0, xlabel=''):
+        if not xs: xs = self.xs
         plt.plot([0+shift_X for _ in range(-1000, 1000, 1)], range(-1000, 1000, 1), color='black') #Y axis
         plt.plot([x for x in range(-1000+shift_X, 1000+shift_X, 1)], [0 for _ in range(-1000+shift_Y, 1000+shift_Y, 1)], color='black') #X axis
-        X_grid = np.arange(min(xs), max(xs), 0.1)
+        X_grid = np.arange(min(xs), max(xs), 0.01)
         plt.plot(X_grid, [self.designate_res_for_x(x) for x in X_grid], color='blue')
         plt.title(name)
+        plt.xlabel(xlabel)
         plt.show()
                 
     
