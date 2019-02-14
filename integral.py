@@ -1,33 +1,32 @@
-from itertools import cycle, chain
+from itertools import cycle
 from functools import reduce
-from polynomial import Polynomial
 
 
 class Integral:
-    def __init__(self, n, a, b, poly):
+    def __init__(self, n, a, b, poly): # klasa przyjmująca jako argumenty przyjęte n, granice przedziału a i b oraz instancję klasy polynomial
         self.n = n
         self.a = a
         self.b = b
         self.h = (b-a)/3*n
-        self.xs = list(a + i*self.h for i in range((3*n)+1))
-        self.ys = list(poly.designate_res_for_x(x) for x in self.xs)
-        self.alphas = self.designate_aplhas()
-
+        self.xs = list(a + i*self.h for i in range((3*n)+1)) # w momencie tworzenia instancji wyznaczane są wartości X zgodnie ze wzorem
+        self.ys = list(poly.designate_res_for_x(x) for x in self.xs) # dla powyższych x-ów wyznaczane są wartości funkcji
+        self.alphas = self.designate_aplhas() # w tym momencie generowana jest lista alf, zgodnie ze schematem dla 3/8 Newtona:
+                                              # na początku i na końcu 1 a w środku 3,3,2,3,3,2,...
     def designate_aplhas(self):
-        n = self.n
-        lst = list(ap for ap, _ in zip(cycle([3,3,2]), range((3*n)-1)))
-        lst.insert(0, 1)
-        lst.append(1)
+        n = self.n                                                        #
+        lst = list(ap for ap, _ in zip(cycle([3,3,2]), range((3*n)-1)))   # w tym miejscu generowana jest cykliczna lista 3,3,2,3,3,2...
+        lst.insert(0, 1)                                                  # dodanie jedynki na początku
+        lst.append(1)                                                     # oraz na końcu
         return lst
 
-    def solution(self):
-        h = self.h
+    def solution(self):     # metoda, która zgodnie ze wzorem oraz wartościami podanymi w konstruktorze
+        h = self.h          # liczy całke oznaczoną
         ys = self.ys
         alphas = self.alphas
         mul = lambda a,b: a*b
-        return (3/8)*h*sum(list(reduce(mul, [y, ap]) for y, ap in zip(ys, alphas)))
+        return (3/8)*h*sum(list(reduce(mul, [y, ap]) for y, ap in zip(ys, alphas))) # suma iloczynów par alfa*y pomnożona przez h*(3/8)
 
-    def average(self):
+    def average(self): # metoda zwracająca średnią wartość funkcji
         a = self.a
         b = self.b
         return 1/(b-a)*self.solution()
