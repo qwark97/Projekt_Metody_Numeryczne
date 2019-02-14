@@ -58,3 +58,4 @@ class Polynomial:
         plt.plot(X_grid, [self.designate_res_for_x(x) for x in X_grid], color='blue')
         plt.title(name)
         plt.show()
+
