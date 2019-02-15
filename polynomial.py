@@ -51,7 +51,8 @@ class Polynomial:
             function = re.sub(pattern, '', function)
         print(function)
 
-    def plot(self, xs, name):
+    def plot(self, xs=None, name='Wykres funkcji'):
+        if not xs: xs = [-5, 5]
         plt.plot([0 for _ in range(-1000, 1000, 1)], range(-1000, 1000, 1), color='black')
         plt.plot([x for x in range(-1000, 1000, 1)], [0 for _ in range(-1000, 1000, 1)], color='black')
         X_grid = np.arange(min(xs), max(xs), 0.1)
