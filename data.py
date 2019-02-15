@@ -1,6 +1,11 @@
 import numpy as np
 import pandas as pd
 
+'''
+ta klasa służy do tego aby pobrać zadane dane, podzielić je na miesiące i lata.
+konstrukcja czysto programistyczna, nie związana z matematyczną częścią zadania
+'''
+
 class Data:
     def __init__(self, file):
         self.dataset = pd.read_csv(file)

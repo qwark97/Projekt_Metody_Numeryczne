@@ -20,21 +20,21 @@ class Polynomial:
         return result
         
     @staticmethod    
-    def designate_derivative(function): #metoda, która dla przekazanej funkcji ZWRACA jej pochodną
-        old_coefs = function.coefficients[1:] #w tym miejscu usuwany jest współczynnik przy x^0
+    def designate_derivative(function):         # metoda, która dla przekazanej funkcji zwraca jej pochodną w postaci instancji klasy Polynomial
+        old_coefs = function.coefficients[1:]   # w tym miejscu usuwany jest współczynnik przy x^0
         new_coefs = []
         for x, coef in enumerate(old_coefs):
-            new_coefs.append(coef*(x+1)) #dla każdego stopnia potęgi wyznaczany jest nowy współczynnik zgodnie z zasadami liczenia pochodnych tego typu
-        return Polynomial(new_coefs) #rezultatem tej metody jest nowa instancja klasy Wielomian odpowiadająca pochodnej funkcji przekazanej jako argument
+            new_coefs.append(coef*(x+1))        # dla każdego stopnia potęgi wyznaczany jest nowy współczynnik zgodnie z zasadami liczenia pochodnych tego typu
+        return Polynomial(new_coefs)            # rezultatem tej metody jest nowa instancja klasy Wielomian odpowiadająca pochodnej funkcji przekazanej jako argument
 
     @staticmethod
-    def designate_derivative_nth_degree(function, n):#metoda, która dla przekazanej funkcji ZWRACA jej pochodną n-tego stopnia
+    def designate_derivative_nth_degree(function, n):   # metoda, która dla przekazanej funkcji zwraca jej pochodną n-tego stopnia
         derivative = function
         for _ in range(n):
             derivative = Polynomial.designate_derivative(derivative)
         return derivative
 
-    def show_function(self): #funkcja wyswietla wielomian w formie zbliżonej do "ręcznej". napisałem ją dla relaksu
+    def show_function(self): # metoda wyswietla wielomian w formie zbliżonej do "ręcznej"
         coefficients_from_the_highest = self.coefficients[::-1]
         if not coefficients_from_the_highest: 
             print('0') 
@@ -51,8 +51,8 @@ class Polynomial:
             function = re.sub(pattern, '', function)
         print(function)
 
-    def plot(self, xs=None, name='Wykres funkcji'):
-        if not xs: xs = [-5, 5]
+    def plot(self, xs=None, name='Wykres funkcji'): # metoda wyświetlająca wykres funkcji dla zadanych współczynników
+        if not xs: xs = [-5, 5]                     # jeśli do metody nie zostanie przekazany zakres 'iksów' dla których ma zostać wyświetlona funkcja to domyślnie przyjmowane są wartości [-5, 5]
         plt.plot([0 for _ in range(-1000, 1000, 1)], range(-1000, 1000, 1), color='black')
         plt.plot([x for x in range(-1000, 1000, 1)], [0 for _ in range(-1000, 1000, 1)], color='black')
         X_grid = np.arange(min(xs), max(xs), 0.1)
