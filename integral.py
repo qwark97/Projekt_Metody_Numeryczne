@@ -1,5 +1,6 @@
 from itertools import cycle
 from functools import reduce
+import numpy as np
 
 
 class Integral:
@@ -8,7 +9,7 @@ class Integral:
         self.a = a
         self.b = b
         self.h = (b-a)/3*n                                              # wyliczenie 'h' zgodnie ze wzorem dla liczenia całki metodą 3/8 Newtona 
-        self.xs = list(a + i*self.h for i in range((3*n)+1))            # w momencie tworzenia instancji wyznaczane są wartości X zgodnie ze wzorem
+        self.xs = np.arange(a, b+1, self.h)                             # w momencie tworzenia instancji wyznaczane są wartości X zgodnie ze wzorem
         self.ys = list(poly.designate_res_for_x(x) for x in self.xs)    # dla powyższych x-ów wyznaczane są wartości funkcji
         self.alphas = self.designate_aplhas()                           # w tym momencie generowana jest lista alf, zgodnie ze schematem dla 3/8 Newtona:
                                                                         # na początku i na końcu 1 a w środku 3,3,2,3,3,2,...
