@@ -1,6 +1,9 @@
 from functools import reduce
 import numpy as np
 import matplotlib.pyplot as plt
+from sympy import simplify
+import re
+from polynomial import Polynomial
 
 '''
 counter - licznik
@@ -66,6 +69,34 @@ class Newton:
         mul = lambda a,b: a*b
         Y = sum(Cs[i]* (reduce(mul, [x-xs[k] for k in range(i)], 1)) for i in range(len(Cs)))
         return Y
+
+    def designate_polynomial(self):
+        Cs = self.Cs
+        xs = self.xs[:-1]
+        res = ''
+        for i in range(len(Cs)):
+            sub = '+'+str(Cs[i]) if Cs[i]>=0 else str(Cs[i])
+            for j in range(i):
+                sub += '*(x-%d)' % xs[j]
+            res += sub
+        pattern1 = r'\+ 0x\^.+? '
+        pattern2 = r'x\^0'
+        pattern3 = r'^ *\+ '
+        for pattern in [pattern1, pattern2, pattern3]:
+            res = re.sub(pattern, '', res)
+        res = re.sub(r'--', '+', res)
+        pol = str(simplify(res))
+        pol = pol.replace(' ', '').replace('-', ' -').replace('+',' ')
+        sums = pol.split(' ')
+        coefs = []
+        for summ in sums:
+            ob = summ.strip()
+            ob = re.sub(r'\*x.*', '', ob)
+            coefs.append(float(ob))
+        final_res = coefs[::-1]
+        return Polynomial(final_res)
+
+
 
     def plot(self, xs=None, name='Wielomian interpolacyjny', shift_X=0, shift_Y=0, xlabel=''):
         if not xs: xs = self.xs
