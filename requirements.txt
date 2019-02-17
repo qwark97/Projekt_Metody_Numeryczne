@@ -1,0 +1,5 @@
+To proper work code needs following packages:
+
+-numpy
+-pandas
+-sympy
