@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from sympy import simplify
 import re
 from polynomial import Polynomial
+from decimal import Decimal
 
 '''
 counter - licznik
@@ -71,7 +72,7 @@ class Newton:
         return Y
 
     def designate_polynomial(self):
-        Cs = self.Cs
+        Cs = list(map(Decimal, self.Cs))
         xs = self.xs[:-1]
         res = ''
         for i in range(len(Cs)):
@@ -86,7 +87,7 @@ class Newton:
             res = re.sub(pattern, '', res)
         res = re.sub(r'--', '+', res)
         pol = str(simplify(res))
-        pol = pol.replace(' ', '').replace('-', ' -').replace('+',' ')
+        pol = pol.replace(' ', '').replace('-', ' -').replace('+',' ').strip()
         sums = pol.split(' ')
         coefs = []
         for summ in sums:
@@ -100,8 +101,8 @@ class Newton:
 
     def plot(self, xs=None, name='Wielomian interpolacyjny', shift_X=0, shift_Y=0, xlabel=''):
         if not xs: xs = self.xs
-        plt.plot([0+shift_X for _ in range(-1000, 1000, 1)], range(-1000, 1000, 1), color='black') #Y axis
-        plt.plot([x for x in range(-1000+shift_X, 1000+shift_X, 1)], [0 for _ in range(-1000+shift_Y, 1000+shift_Y, 1)], color='black') #X axis
+        #plt.plot([0+shift_X for _ in range(-1, 13)], range(-1, 13), color='black') #Y axis
+        plt.plot([x+shift_X for x in range(-1, 13)], [0+shift_X for _ in range(-1, 13)], color='black') #X axis
         X_grid = np.arange(min(xs), max(xs), 0.01)
         plt.plot(X_grid, [self.designate_res_for_x(x) for x in X_grid], color='blue')
         plt.title(name)
