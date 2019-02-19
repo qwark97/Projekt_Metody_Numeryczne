@@ -8,7 +8,7 @@ class Integral:
         self.n = n
         self.a = a
         self.b = b
-        self.h = (b-a)/3*n                                              # wyliczenie 'h' zgodnie ze wzorem dla liczenia całki metodą 3/8 Newtona 
+        self.h = (b-a)/(3*n )                                           # wyliczenie 'h' zgodnie ze wzorem dla liczenia całki metodą 3/8 Newtona 
         self.xs = np.arange(a, b+1, self.h)                             # w momencie tworzenia instancji wyznaczane są wartości X zgodnie ze wzorem
         self.ys = list(poly.designate_res_for_x(x) for x in self.xs)    # dla powyższych x-ów wyznaczane są wartości funkcji
         self.alphas = self.designate_aplhas()                           # w tym momencie generowana jest lista alf, zgodnie ze schematem dla 3/8 Newtona:
