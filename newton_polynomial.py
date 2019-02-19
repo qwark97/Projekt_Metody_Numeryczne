@@ -80,28 +80,28 @@ class Newton:
             for j in range(i):
                 sub += '*(x-%d)' % xs[j]
             res += sub
-        pattern1 = r'\+ 0x\^.+? '
-        pattern2 = r'x\^0'
-        pattern3 = r'^ *\+ '
-        for pattern in [pattern1, pattern2, pattern3]:
-            res = re.sub(pattern, '', res)
+        pattern = r'(\+ 0x\^.+? )|(x\^0)|(^ *\+ )'
+        res = re.sub(pattern, '', res)
         res = re.sub(r'--', '+', res)
+        
         pol = str(simplify(res))
         pol = pol.replace(' ', '').replace('-', ' -').replace('+',' ').strip()
         sums = pol.split(' ')
         coefs = []
         for summ in sums:
             ob = summ.strip()
-            ob = re.sub(r'\*x.*', '', ob)
-            coefs.append(float(ob))
+            pattern = r'(\*x.*)|(x.*)'
+            ob = re.sub(pattern, '', ob)
+            if ob: coefs.append(float(ob))
+            else: coefs.append(1.0)
         final_res = coefs[::-1]
         return Polynomial(final_res)
 
-    def plot(self, xs=None, name='Wielomian interpolacyjny', label='', show=True):
+    def plot(self, xs=None, name='Wielomian interpolacyjny', label='', show=True, color='blue'):
         if not xs: xs = self.xs
         plt.plot([x for x in range(-2, 14)], [0 for _ in range(-2, 14)], color='black') #X axis
         X_grid = np.arange(min(xs), max(xs), 0.01)
-        plt.plot(X_grid, [self.designate_res_for_x(x) for x in X_grid], color='blue', label=label)
+        plt.plot(X_grid, [self.designate_res_for_x(x) for x in X_grid], color=color, label=label)
         plt.title(name)
         if show: plt.show()
                 

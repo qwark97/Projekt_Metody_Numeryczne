@@ -18,20 +18,18 @@ class Polynomial:
         coefficients, degree = self.coefficients, self.degree
         result = sum(coef*x**i for coef, i in zip(coefficients, range(degree+1)))
         return result
-        
-    @staticmethod    
-    def designate_derivative(function):         # metoda, która dla przekazanej funkcji zwraca jej pochodną w postaci instancji klasy Polynomial
-        old_coefs = function.coefficients[1:]   # w tym miejscu usuwany jest współczynnik przy x^0
+            
+    def designate_derivative(self):         # metoda, która dla przekazanej funkcji zwraca jej pochodną w postaci instancji klasy Polynomial
+        old_coefs = self.coefficients[1:]   # w tym miejscu usuwany jest współczynnik przy x^0
         new_coefs = []
         for x, coef in enumerate(old_coefs):
             new_coefs.append(coef*(x+1))        # dla każdego stopnia potęgi wyznaczany jest nowy współczynnik zgodnie z zasadami liczenia pochodnych tego typu
         return Polynomial(new_coefs)            # rezultatem tej metody jest nowa instancja klasy Wielomian odpowiadająca pochodnej funkcji przekazanej jako argument
 
-    @staticmethod
-    def designate_derivative_nth_degree(function, n):   # metoda, która dla przekazanej funkcji zwraca jej pochodną n-tego stopnia
-        derivative = function
+    def designate_derivative_nth_degree(self, n):   # metoda, która dla przekazanej funkcji zwraca jej pochodną n-tego stopnia
+        derivative = self.coefficients
         for _ in range(n):
-            derivative = Polynomial.designate_derivative(derivative)
+            derivative = self.designate_derivative()
         return derivative
 
     def show_function(self): # metoda wyswietla wielomian w formie zbliżonej do "ręcznej"
@@ -51,11 +49,11 @@ class Polynomial:
             function = re.sub(pattern, '', function)
         print(function)
 
-    def plot(self, xs=None, name='Wykres funkcji', label='', show=True):
+    def plot(self, xs=None, name='Wykres funkcji', label='', show=True, color='blue'):
         if not xs: xs = [-5, 5]
         plt.plot([x for x in range(-2, 14)], [0 for _ in range(-2, 14)], color='black') #X axis
         X_grid = np.arange(min(xs), max(xs)+0.01, 0.01)
-        plt.plot(X_grid, [self.designate_res_for_x(x) for x in X_grid], color='blue', label=label)
+        plt.plot(X_grid, [self.designate_res_for_x(x) for x in X_grid], color=color, label=label)
         plt.title(name)
         if show: plt.show()
 
