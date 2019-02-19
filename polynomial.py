@@ -51,11 +51,11 @@ class Polynomial:
             function = re.sub(pattern, '', function)
         print(function)
 
-    def plot(self, xs=None, shift_X=0, name='Wykres funkcji'):  # metoda wyświetlająca wykres funkcji dla zadanych współczynników
-        if not xs: xs = [-5, 5]                                 # jeśli do metody nie zostanie przekazany zakres 'iksów' dla których ma zostać wyświetlona funkcja to domyślnie przyjmowane są wartości [-5, 5]
-        plt.plot([x+shift_X for x in range(-1, 13)], [0+shift_X for _ in range(-1, 13)], color='black')
-        X_grid = np.arange(min(xs), max(xs), 0.01)
-        plt.plot(X_grid, [self.designate_res_for_x(x) for x in X_grid], color='blue')
+    def plot(self, xs=None, name='Wykres funkcji', label='', show=True):
+        if not xs: xs = [-5, 5]
+        plt.plot([x for x in range(-2, 14)], [0 for _ in range(-2, 14)], color='black') #X axis
+        X_grid = np.arange(min(xs), max(xs)+0.01, 0.01)
+        plt.plot(X_grid, [self.designate_res_for_x(x) for x in X_grid], color='blue', label=label)
         plt.title(name)
-        plt.show()
+        if show: plt.show()
 

@@ -97,17 +97,13 @@ class Newton:
         final_res = coefs[::-1]
         return Polynomial(final_res)
 
-
-
-    def plot(self, xs=None, name='Wielomian interpolacyjny', shift_X=0, shift_Y=0, xlabel=''):
+    def plot(self, xs=None, name='Wielomian interpolacyjny', label='', show=True):
         if not xs: xs = self.xs
-        #plt.plot([0+shift_X for _ in range(-1, 13)], range(-1, 13), color='black') #Y axis
-        plt.plot([x+shift_X for x in range(-1, 13)], [0+shift_X for _ in range(-1, 13)], color='black') #X axis
+        plt.plot([x for x in range(-2, 14)], [0 for _ in range(-2, 14)], color='black') #X axis
         X_grid = np.arange(min(xs), max(xs), 0.01)
-        plt.plot(X_grid, [self.designate_res_for_x(x) for x in X_grid], color='blue')
+        plt.plot(X_grid, [self.designate_res_for_x(x) for x in X_grid], color='blue', label=label)
         plt.title(name)
-        plt.xlabel(xlabel)
-        plt.show()
+        if show: plt.show()
                 
     
 
