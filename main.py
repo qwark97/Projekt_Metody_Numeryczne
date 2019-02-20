@@ -96,14 +96,21 @@ avgs.append(avgs[2])
 avgs.append(avgs[3]) 
 
 interpolation = Newton(np.arange(-0.5, 15.5), avgs)
-interpolation.plot([1, 13], show=False, label='interpolacja', color='green')
+interpolation.plot([-0.5, 15.5], show=False, label='interpolacja', color='green')
 
-polynomial = interpolation.designate_polynomial()                                         # utworzenie obiektu klasy wielomian z interpolacji Newtona
-polynomial.plot([1, 13], name='Wielomian przedstawiający zmiany temperatur w ciągu roku', show=False, label='wielomian', color='red') # na bazie wykresu wyznaczam przedziały, w których szukane będą pierwiastki wielomianu
+#print('C wyliczone przeze mnie:', interpolation.Cs)
 
-plt.legend()
-plt.show()
+polynomial = interpolation.designate_polynomial()    # utworzenie obiektu klasy wielomian z interpolacji Newtona
+polynomial.plot([-0.5, 15.5], name='Wielomian przedstawiający zmiany temperatur w ciągu roku', show=False, label='wielomian', color='red') # na bazie wykresu wyznaczam przedziały, w których szukane będą pierwiastki wielomianu
 
+
+
+#plt.legend()
+#plt.show()
+
+#fst = interpolation.designate_res_for_x(0)
+#scd = polynomial.designate_res_for_x(0)
+#print(fst, scd, sep='\n')
 
 
 #met_stycznych = NRMethod(wielomian, 0.04, 0.05)
