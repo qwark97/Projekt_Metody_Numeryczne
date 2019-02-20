@@ -10,8 +10,8 @@ res_aproxs - przybliżenia rozwiązań
 class NRMethod:
     def __init__(self, poly, a, b):
         self.poly = poly                                                        # wielomian, na którym stosowana będzie metoda stycznych
-        self.derivative1 = poly.designate_derivative_nth_degree(poly, 1)        # pierwsza pochodna
-        self.derivative2 = poly.designate_derivative_nth_degree(poly, 2)        # druga pochodna
+        self.derivative1 = poly.designate_derivative_nth_degree(1)              # pierwsza pochodna
+        self.derivative2 = poly.designate_derivative_nth_degree(2)              # druga pochodna
         self.a = a                                                              # lewa krawędź przedziału w której będzie szukane rozwiązanie
         self.b = b                                                              # prawa krawędź przedziału w której będzie szukane rozwiązanie
         self.validate()                                                         # metoda sprawdzająca czy spełnione są warunki zbieżności
