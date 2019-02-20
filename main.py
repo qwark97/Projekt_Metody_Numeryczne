@@ -21,6 +21,7 @@ all_years = data.all_years
 '''
 avgs = list(starmap(avg_labeled, zip(list(mnths.values())[1:], data.all_months)))
 plt.scatter(np.arange(1.5, 13.5), list(starmap(lambda _, temp: temp, avgs)), color='red', label='Średnie miesięczne temperatury')
+plt.title('Średnie temperatury miesięczne w ciągu roku')
 plt.show()
 
 print('\nTemperatury w stopniach Celcjusza')
@@ -86,73 +87,102 @@ plt.show()
 """
 SZUKANIE DNI DLA TEMPERATUR UJEMNYCH ORAZ DODATNICH UŻYWAJĄC METOD PRZYBLIŻONYCH - TUTAJ METODY SIECZNYCH
 """ 
-
+'''
 # ponowne wynaczenie wielomianu wybranego na poprzednim etapie
+avgs = list(map(avg, data.all_months))   
+avgs.insert(0, avgs[-1])
+avgs.insert(0, avgs[-2]) 
+avgs.append(avgs[2])     
+avgs.append(avgs[3]) 
 
-avgs = list(map(avg, data.all_months))       
+# utworzenie obiektu klasy wielomian z interpolacji Newtona
+interpolation = Newton(np.arange(-0.5, 15.5), avgs)
+polynomial = interpolation.designate_polynomial() 
+polynomial.plot([1, 13], name='Wielomian przedstawiający zmiany temperatur w ciągu roku', color='green') 
+
+# na bazie wykresu wyznaczam przedziały, w których szukane będą pierwiastki wielomianu
+scopes = [(2, 2.5), (12.5, 13)]
+results = []
+
+for scope in scopes:
+    a, b = scope
+    method = NRMethod(polynomial, a, b)
+    approx = method.iterate(eps=10**(-5))
+    results.append(approx)
+
+for point, approxs in zip(scopes, results):
+    print('Kolejne przybliżenia pierwiastka w przedziale', point, ':', '\n', approxs)
+
+# szacuje konkretne dni w których temperatura zmienia się 
+# z ujemnej na dodatnią i na odwrót aby ocenić 
+# kiedy temperatura jest ujemna oraz dodatnia
+first_change = str(ceil((results[0][-1] - int(results[0][-1]) ) * 30))+'.%02d' % int(results[0][-1])
+secon_change = str(ceil((results[1][-1] - int(results[1][-1]) ) * 30))+'.%02d' % int(results[1][-1])
+
+print(
+    """\n\tW dniach od 01.01 do {} średnia temperatura była ujemna.
+       Następnie średnia temperatura aż do dnia {} była dodatnia. 
+       Po wspomnianej dacie, średnia temperatura już 
+       do końca roku była ujemna.\n""".format(first_change, secon_change)
+)
+
+
+
+'''
+"""
+SZUKANIE NAJCIEPLEJSZEGO I NAJZIMNIEJSZEGO DNIA W ROKU
+"""
+'''
+avgs = list(map(avg, data.all_months))   
 avgs.insert(0, avgs[-1])
 avgs.insert(0, avgs[-2]) 
 avgs.append(avgs[2])     
 avgs.append(avgs[3]) 
 
 interpolation = Newton(np.arange(-0.5, 15.5), avgs)
-interpolation.plot([-0.5, 15.5], show=False, label='interpolacja', color='green')
+polynomial = interpolation.designate_polynomial()
+polynomial.plot([1, 13])
+derivative = polynomial.designate_derivative()
+derivative.plot([1, 13], name='Wykres pochodnej funkcji')
 
-#print('C wyliczone przeze mnie:', interpolation.Cs)
+#szukam y=0 dla pochodnej w przedziale wybranym na bazie wykresu
+scope = [7.7, 7.8]
+method = NRMethod(derivative, scope[0], scope[1])
+approx = method.iterate(eps=10**(-5))
+x = approx[-1]
+min_or_max = ('Znalezione x to maximum lokalne funkcji' if derivative.designate_res_for_x(x-0.001) > 0 
+                                                        else 'Znaleziony x to minimum lokalne funkcji')
+print(min_or_max)
+hottest = str(ceil((x - int(x)) * 30))+'.%02d' % int(x)
+print('Najciepleszy dzień w roku przypadał na %s' % hottest)
 
-polynomial = interpolation.designate_polynomial()    # utworzenie obiektu klasy wielomian z interpolacji Newtona
-polynomial.plot([-0.5, 15.5], name='Wielomian przedstawiający zmiany temperatur w ciągu roku', show=False, label='wielomian', color='red') # na bazie wykresu wyznaczam przedziały, w których szukane będą pierwiastki wielomianu
+# jako, że otrzymany wielomian nie ma jako tako minimum lokalnego 
+# szukam najzimniejszego dnia na początku oraz na końcu wykresu
 
-
-
-#plt.legend()
-#plt.show()
-
-#fst = interpolation.designate_res_for_x(0)
-#scd = polynomial.designate_res_for_x(0)
-#print(fst, scd, sep='\n')
-
-
-#met_stycznych = NRMethod(wielomian, 0.04, 0.05)
-
-#wyniki = met_stycznych.iterate(eps=10**(-5))
-
-#print(wyniki)
-
-#dzien = print(ceil(wyniki[-1]/365))
-
-
+coldest = min((1, polynomial.designate_res_for_x(1)), (13, polynomial.designate_res_for_x(13)), key=lambda x: x[1])[0]
+print('Najzimniejszy dzien w roku przypadał na {}'.format('01.01' if coldest is 1 else '31.12'))
+'''
 """
 WYLICZENIE ZA POMOCĄ ŚREDNIEJ CAŁKOWEJ ŚREDNIEJ TEMPERATURY W ROKU
 """
-'''
 
-# ponowne wynaczenie wielomianu wybranego na poprzednim etapie
+avgs = list(map(avg, data.all_months))   
+avgs.insert(0, avgs[-1])
+avgs.insert(0, avgs[-2]) 
+avgs.append(avgs[2])     
+avgs.append(avgs[3]) 
 
-avgs = []                                           
-for mnth_idx, mnth in enumerate(data.all_months):   
-    avgs.append((mnths[mnth_idx], avg(mnth)))       
+interpolation = Newton(np.arange(-0.5, 15.5), avgs)
+polynomial = interpolation.designate_polynomial()
 
-closests_temps = []
-for avg, temps in zip(avgs, data.all_months):
-    closest = temps[0]                      
-    new_dis = abs(temps[0] - avg[1])                
-    old_dis = new_dis                               
-    for temp in temps:                              
-        new_dis = abs(temp-avg[1])                  
-        if new_dis < old_dis:                       
-            old_dis = new_dis
-            closest = temp
-    closests_temps.append((avg[0], closest))
+for n in range(1, 21):
+    integral = Integral(n, 1, 13, polynomial)
+    print('Wartość dla n =', n,': ', integral.solution())
 
-interpolacja2 = Newton([x for x in range(12)], [temp for _, temp in closests_temps])
-wielomian = interpolacja2.designate_polynomial()
-#wielomian.plot([0, 11])
+# Wartość całki normuje się dla n = 6 dlatego dla takiego n policzę średnią
 
-calka = Integral(3, 3, 11, wielomian)
+integral = Integral(6, 1, 13, polynomial)
+average_temp = integral.average()
 
-sr_temp = calka.average()
+print('Średnia dobowa temperatura w roku w Polsce wynosiła ok.', round(average_temp, 2), 'stopni Celsjusza')
 
-print(sr_temp)
-
-'''
