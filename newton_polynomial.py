@@ -83,7 +83,10 @@ class Newton:
         pattern = r'(\+ 0x\^.+? )|(x\^0)|(^ *\+ )'
         res = re.sub(pattern, '', res)
         res = re.sub(r'--', '+', res)
+        #
+        print('Z mojej klasy:', res, sep='\n')
         
+        #
         pol = str(simplify(res))
         pol = pol.replace(' ', '').replace('-', ' -').replace('+',' ').strip()
         sums = pol.split(' ')
