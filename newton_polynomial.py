@@ -78,15 +78,11 @@ class Newton:
         for i in range(len(Cs)):
             sub = '+'+str(Cs[i]) if Cs[i]>=0 else str(Cs[i])
             for j in range(i):
-                sub += '*(x-%d)' % xs[j]
+                sub += '*(x-%f)' % xs[j]
             res += sub
         pattern = r'(\+ 0x\^.+? )|(x\^0)|(^ *\+ )'
         res = re.sub(pattern, '', res)
         res = re.sub(r'--', '+', res)
-        #
-        print('Z mojej klasy:', res, sep='\n')
-        
-        #
         pol = str(simplify(res))
         pol = pol.replace(' ', '').replace('-', ' -').replace('+',' ').strip()
         sums = pol.split(' ')
@@ -106,6 +102,7 @@ class Newton:
         X_grid = np.arange(min(xs), max(xs), 0.01)
         plt.plot(X_grid, [self.designate_res_for_x(x) for x in X_grid], color=color, label=label)
         plt.title(name)
+        plt.legend()
         if show: plt.show()
                 
     
