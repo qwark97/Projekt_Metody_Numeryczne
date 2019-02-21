@@ -1,12 +1,5 @@
 import numpy as np
 
-'''
-derivative - pochodna
-Newton-Raphson - metoda stycznych
-res_aproxs - przybliżenia rozwiązań
-
-'''
-
 class NRMethod:
     def __init__(self, poly, a, b):
         self.poly = poly                                                        # wielomian, na którym stosowana będzie metoda stycznych
@@ -17,7 +10,7 @@ class NRMethod:
         self.validate()                                                         # metoda sprawdzająca czy spełnione są warunki zbieżności
         self.starting_point = self.designate_starting_point()                   # punkt startowy do wykonywania obliczeń
 
-    def designate_starting_point(self):     # metoda, która wyznacza punkt startowy
+    def designate_starting_point(self): # metoda, która wyznacza punkt startowy
         poly = self.poly
         derivative2 = self.derivative2
         a = self.a
@@ -46,19 +39,19 @@ class NRMethod:
                 res_aproxs.append(x_next)
                 diff = abs(x_next - x_pres)
                 x_pres = x_next
-        else:
+        else: # w przypadku nie podania parapetru podnoszony jest błąd
             raise Exception('Podaj liczbe iteracji lub epsilon')
         return res_aproxs
 
-    def validate(self):
+    def validate(self): # metoda sprawdzająca warunki zbieżności dla metody stycznych
         a = self.a
         b = self.b
         poly = self.poly
         derivative1 = self.derivative1
         derivative2 = self.derivative2
+        assert derivative1 and derivative2, 'Brak pochodnej pierwszego lub drugiego stopnia'
         test_deriv = lambda lst: True if all(y<=0 for y in lst) or all(y>=0 for y in lst) else False # funkcja sprawdzająca jedyność znaku na podanej liście wartości
-        scope = [a,b]                                                               # przedział, dla którego sprawdzane są wartości w kolejnych warunkach
-        xs = np.arange(min(scope), max(scope), 0.1)                                 # ta konstrukcja tworzy liste 'iksów' od a do b różniących się od siebie wartością 0.1
+        xs = np.arange(a, b, 0.1)                                                   # ta konstrukcja tworzy liste 'iksów' od a do b różniących się od siebie wartością 0.1
         first = poly.designate_res_for_x(a)*poly.designate_res_for_x(b) < 0         # test pierwszego warunku zbieżności
         second = test_deriv([derivative1.designate_res_for_x(x) for x in xs])       # test drugiego warunku zbieżności
         third = test_deriv([derivative2.designate_res_for_x(x) for x in xs])        # test trzeciego warunku zbieżności
@@ -67,4 +60,5 @@ class NRMethod:
         """ na zajęciach sprawdzaliśmy stałość znaku na pochodnych wizualnie patrząc na wykres - tutaj dzieje się to 
             analogiczne lecz 'automatycznie' - począwszy od 'a' wszystkie wartości pochodnej pierwszego, a potem drugiego stopnia
             muszą mieć taki sam znak - jeśli tak nie będzie, do zmiennej zostanie przypisana wartość False co w kolejnym etapie
-            poskutkuje podniesieniem błędu """
+            poskutkuje podniesieniem błędu ; błąd zostanie podniesiony również jeśli nie istnieje pochodna pierwszego lub drugiego
+            stopnia"""
