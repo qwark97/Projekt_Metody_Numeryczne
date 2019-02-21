@@ -51,7 +51,7 @@ class Polynomial:
 
     def plot(self, xs=None, name='Wykres funkcji', label='', show=True, color='blue'):
         if not xs: xs = [-5, 5]
-        plt.plot([x for x in range(-2, 14)], [0 for _ in range(-2, 14)], color='black') #X axis
+        plt.plot([x for x in range(0, 15)], [0 for _ in range(0, 15)], color='black') #X axis
         X_grid = np.arange(min(xs), max(xs)+0.01, 0.01)
         plt.plot(X_grid, [self.designate_res_for_x(x) for x in X_grid], color=color, label=label)
         plt.title(name)
